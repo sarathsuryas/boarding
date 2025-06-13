@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let name = "bubble sort";
+let items = [43,67,12,76,43,98,43,1,0,8,4,7,15,34,76,98,22,11,77];
+console.info(name)
+var worker = new Worker('index.js');
+worker.postMessage(items);
+worker.onmessage = function (event) {
+    console.info("The sorted data: " + event.data);
+};
+worker.onerror = function (event) {
+    console.error(event.message, event);
+};
+console.info(name)
+    </script>
+</body>
+</html>
