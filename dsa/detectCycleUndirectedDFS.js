@@ -1,61 +1,51 @@
 class Graph {
-    constructor(noOfVertices) {
-    this.noOfVertices = noOfVertices
-    this.adjList = new Map()
+    constructor() {
+        this.adjList = new Map()
     }
-    addVertex(vertex) {
-     this.adjList.set(vertex,[])
+    addEdge(v1,v2) {
+        if(!this.adjList.has(v1)) {
+            this.adjList.set(v1,[])
+        }
+        if(!this.adjList.has(v2)) {
+            this.adjList.set(v2,[])
+        }
+        this.adjList.get(v1).push(v2)
+        this.adjList.get(v2).push(v1)
     }
-    addEdge(vertex,edge) {
-      this.adjList.get(vertex).push(edge)
-      this.adjList.get(edge).push(vertex)
-    }
-    printGraph() {
-      for (const [key,value] of this.adjList) {
-        console.log(key,'->',value.join(" "))
-      }
-    }
-   isCycle(currentNode,parent,visited={}) {
-    debugger
-    console.log('currentNode',currentNode)
-    debugger
-    console.log('parent',parent)
-     visited[currentNode] = true
-     for (const adjacent of this.adjList.get(currentNode)) {
-      debugger
-      console.log('adjacent',adjacent)
-        if(!visited[adjacent]) {
-          if(this.isCycle(adjacent,currentNode,visited)) {
-            return true
-          }
-        } else if(adjacent !== parent) {
-          return true
+    
+}
+
+
+const graph = new Graph()
+
+graph.addEdge(1, 2)
+graph.addEdge(2, 3)
+graph.addEdge(4, 5)
+graph.addEdge(5, 6)
+graph.addEdge(6, 4)
+function hasCycle(curr,parent,visited) {
+    visited[curr] = true
+     for (const adjacent of graph.adjList.get(curr)) {
+         if(!visited[adjacent]) {
+            if(hasCycle(adjacent,curr,visited)) return true
+         } else if(parent!==adjacent) {
+              return true
         }
      }
      return false
-   }
-  
-  
-  }
-  
-  const graph = new Graph(6)
-  
-  graph.addVertex(1)
-  graph.addVertex(2)
-  graph.addVertex(3)
-  graph.addVertex(4)
-  graph.addVertex(5)
-  graph.addVertex(6)
-  graph.addVertex(7)
-  
-  graph.addEdge(1,2)
-  graph.addEdge(3,4)
-  graph.addEdge(1,3)
-  graph.addEdge(2,5)
-  graph.addEdge(3,6)
-  graph.addEdge(5,7)
-  graph.addEdge(6,7)
-  
-  // graph.printGraph()
-  
-  console.log(graph.isCycle(1,-1))
+}
+
+function detectCycle() {
+    const visited = {}
+    for (const key of graph.adjList.keys()) {
+        if(!visited[key]) {
+            if(hasCycle(key,-1,visited)) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+
+console.log(detectCycle())
